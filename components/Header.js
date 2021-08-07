@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   GlobeAltIcon,
   MenuIcon,
@@ -6,17 +5,19 @@ import {
   UserCircleIcon,
   UsersIcon,
 } from "@heroicons/react/solid";
+import { useRouter } from "next/dist/client/router";
+import Image from "next/image";
 import { useState } from "react";
+import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { DateRangePicker } from "react-date-range";
-import Link from "next/link";
 
-const Header = () => {
+const Header = ({ placeholder }) => {
   const [searchInput, setSearchInput] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [number, setNumber] = useState(1);
+  const router = useRouter();
 
   const selectionRange = {
     startDate: startDate,
@@ -33,17 +34,30 @@ const Header = () => {
     setSearchInput("");
   };
 
+  const search = () => {
+    router.push({
+      pathname: "/search",
+      query: {
+        location: searchInput,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        number,
+      },
+    });
+  };
+
   return (
     <header className="sticky top-0 py-5 px-5 z-50 grid grid-cols-3 bg-white shadow-md">
-      <div className="relative flex items-center h-10 cursor-pointer my-auto md:px-10">
-        <Link href="/">
-          <Image
-            src="https://links.papareact.com/qd3"
-            layout="fill"
-            objectFit="contain"
-            objectPosition="left"
-          />
-        </Link>
+      <div
+        onClick={() => router.push("/")}
+        className="relative flex items-center h-10 cursor-pointer my-auto md:px-10"
+      >
+        <Image
+          src="https://links.papareact.com/qd3"
+          layout="fill"
+          objectFit="contain"
+          objectPosition="left"
+        />
       </div>
 
       <div className="flex items-center md:border-2 rounded-full md:shadow-sm py-2">
@@ -51,7 +65,7 @@ const Header = () => {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           type="text"
-          placeholder="Start you'r search"
+          placeholder={`${placeholder || "Start you'r Search"}`}
           className="flex-grow pl-5 bg-transparent outline-none text-sm text-gray-500 placeholder-red-400"
         />
         <SearchIcon className="h-8 hidden md:inline-flex p-2 mr-2 cursor-pointer text-white bg-red-400 rounded-full" />
@@ -95,8 +109,12 @@ const Header = () => {
             >
               Cansel
             </button>
-            <button className="border border-blue-300 text-blue-400 hover:bg-blue-400 hover:text-black rounded-md shadow-lg px-4 py-1">
-              <Link href="/search">Search</Link>
+
+            <button
+              onClick={search}
+              className="border border-blue-300 text-blue-400 hover:bg-blue-400 hover:text-black rounded-md shadow-lg px-4 py-1"
+            >
+              Search
             </button>
           </div>
         </div>
