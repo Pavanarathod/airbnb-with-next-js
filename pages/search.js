@@ -4,6 +4,7 @@ import { useRouter } from "next/dist/client/router";
 import { format } from "date-fns";
 import Head from "next/head";
 import InfoCard from "../components/InfoCard";
+import Map from "../components/Map";
 
 const Search = ({ searchResult }) => {
   const router = useRouter();
@@ -22,7 +23,7 @@ const Search = ({ searchResult }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header placeholder={`${location} | ${range} ${number}`} />
-      <main>
+      <main className="flex">
         <section className="flex-grow p-14 px-6">
           <p className="text-xs">
             300 + Stays {range} for {number} of guests
@@ -65,6 +66,10 @@ const Search = ({ searchResult }) => {
               )
             )}
           </div>
+        </section>
+
+        <section className="hidden xl:inline-flex border-l-2 border-t-2 rounded-md border-gray-300 shadow-2xl mt-4 xl:min-w-[600px]">
+          <Map results={searchResult} />
         </section>
       </main>
       <Footer />
